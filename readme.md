@@ -2,6 +2,7 @@
 <br>
 Tutorial? <br>
 - git clone https://github.com/rezaniverse/telegram-spammer.git
+- cd telegram-spammer
 - pastikan sudah menginstall node js
 - npm install request readline
 - node main.js
