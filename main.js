@@ -9,7 +9,7 @@ const rl = readline.createInterface({
 async function sendMessage(botToken, chatId, message) {
   const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-  const stopMessage = "\n\n -> if you want to stop this spam, contact @riizeisme <-";
+  const stopMessage = "\n\n -> if you want to stop this spam, contact https://t.me/riizeisme <-";
   const fullMessage = message + stopMessage;
 
   const options = {
