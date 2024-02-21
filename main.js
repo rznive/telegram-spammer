@@ -32,7 +32,7 @@ async function sendMessage(botToken, chatId, message) {
   });
 }
 
-const defaultDelayBetweenMessages = 1000; // 1 second
+const defaultDelayBetweenMessages = 500; // 0,5 DETIK DELAYNYA BISA DIGANTI SESUKAMU
 
 async function sendMessagesWithDelay(botToken, chatId, messages, loopCount, delayBetweenMessages = defaultDelayBetweenMessages) {
   try {
@@ -82,8 +82,9 @@ function inputCustomMessage() {
 async function sendMessagesMenu(botToken, chatId) {
   console.log('1. Input custom message');
   console.log('2. Send message with template');
+  console.log('3. Send message with image');
 
-  rl.question('Choose menu (1/2): ', async (menuChoice) => {
+  rl.question('Choose menu (1/2/3): ', async (menuChoice) => {
     switch (menuChoice) {
       case '1':
         const customMessages = await inputCustomMessage();
@@ -96,13 +97,76 @@ async function sendMessagesMenu(botToken, chatId) {
           sendMessagesWithDelay(botToken, chatId, listAbangkuh, loopCount);
         });
         break;
+      case '3':
+        rl.question('Enter the URL of the image: ', async (imageUrl) => {
+          rl.question('Enter the caption for the image: ', async (caption) => {
+            rl.question('How many times do you want to send this image? ', (loopCount) => {
+              sendPhotoMessageWithDelay(botToken, chatId, imageUrl, caption, loopCount);
+            });
+          });
+        });
+        break;
       default:
-        console.error('Invalid menu choice. Please choose 1 or 2.');
+        console.error('Invalid menu choice. Please choose 1, 2, or 3.');
         rl.close();
         break;
     }
   });
 }
+
+async function sendPhotoMessage(botToken, chatId, imageUrl, caption) {
+  const apiUrl = `https://api.telegram.org/bot${botToken}/sendPhoto`;
+
+  const options = {
+    method: 'POST',
+    uri: apiUrl,
+    formData: {
+      chat_id: chatId,
+      photo: imageUrl,
+      caption: caption,
+      parse_mode: "HTML"
+    },
+  };
+
+  return new Promise((resolve, reject) => {
+    request(options, (error, response, body) => {
+      if (!error && response.statusCode === 200 && body.ok) {
+        resolve(body.result);
+      } else {
+        reject(body || error);
+      }
+    });
+  });
+}
+
+async function sendPhotoMessageWithDelay(botToken, chatId, imageUrl, caption, loopCount, delayBetweenMessages = defaultDelayBetweenMessages) {
+  try {
+    for (let i = 0; i < loopCount; i++) {
+      try {
+        const result = await sendPhotoMessage(botToken, chatId, imageUrl, caption);
+        if (result && result.ok) {
+          console.log(`Image message successfully sent to chat ID: ${chatId}`);
+        } else {
+          console.error('Failed to send image message:', result);
+        }
+      } catch (error) {
+        console.error(error.message || error);
+      }
+
+      if (i < loopCount - 1) {
+        console.log(`-> Waiting for ${delayBetweenMessages / 1000} seconds before sending the next message...`);
+        await delay(delayBetweenMessages);
+      }
+    }
+
+    console.log('-> All image messages successfully sent.');
+  } catch (error) {
+    console.error('-> Error sending image messages:', error.message || error);
+  } finally {
+    rl.close();
+  }
+}
+
 const listAbangkuh = [
   "kijang 1, ganti 🦌",
   "kasih paham queen 🤭🔥 MENYALA",
@@ -156,7 +220,7 @@ const listAbangkuh = [
   "bertahap abangkuuuu🔥🤙🪜👟",
   "gokil capt kaki tiga🦵🔥🔥",
   "kasih keras idola 🔥🔥",
-  "jangan kasi longgar king 🔝💯🔥🙌🏼",
+  "jangan kasi longgar king 🔥🔥🔥",
   "tipis tipis 🔥🔛🔝",
   "nikmati proses kakandaaa🤙🔥🙇‍♂️",
   "trcium aroma ilmu padi abangkuh🔥🔥🌾🌾",
