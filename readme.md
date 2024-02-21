@@ -1,6 +1,7 @@
 <b>BOT NODE JS TELEGRAM SPAMM FOR SCAMMER [PHISING PERNIKAHAN DIGITAL, UNDANGAN DIGITAL, PAKET]</b>
 <br>
 Tutorial? <br>
+- pastikan anda sudah menginstall node js
 - git clone https://github.com/rezaniverse/telegram-spammer.git
 - cd telegram-spammer
 - pastikan sudah menginstall node js
