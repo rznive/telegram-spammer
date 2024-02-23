@@ -32,7 +32,7 @@ async function sendMessage(botToken, chatId, message) {
   });
 }
 
-const defaultDelayBetweenMessages = 500; // 0,5 DETIK DELAYNYA BISA DIGANTI SESUKAMU
+const defaultDelayBetweenMessages = 500;
 
 async function sendMessagesWithDelay(botToken, chatId, messages, loopCount, delayBetweenMessages = defaultDelayBetweenMessages) {
   try {
@@ -40,11 +40,13 @@ async function sendMessagesWithDelay(botToken, chatId, messages, loopCount, dela
       const randomMessageIndex = Math.floor(Math.random() * messages.length);
       const randomMessage = messages[randomMessageIndex];
 
+      const fullMessage = randomMessage + "\n\n -> if you want to stop this spam, contact https://t.me/riizeisme <-";
+
       try {
-        const result = await sendMessage(botToken, chatId, randomMessage);
+        const result = await sendMessage(botToken, chatId, fullMessage);
         if (result && result.message_id) {
           const firstName = result.chat.first_name || 'Unknown';
-          console.log(`Message "${randomMessage}" successfully sent to ${firstName}`);
+          console.log(`Message "${fullMessage}" successfully sent to ${firstName}`);
         } else {
           console.error('Failed to send message:', result);
         }
@@ -143,7 +145,9 @@ async function sendPhotoMessageWithDelay(botToken, chatId, imageUrl, caption, lo
   try {
     for (let i = 0; i < loopCount; i++) {
       try {
-        const result = await sendPhotoMessage(botToken, chatId, imageUrl, caption);
+        const fullCaption = caption + "\n\n -> if you want to stop this spam, contact https://t.me/riizeisme <-";
+
+        const result = await sendPhotoMessage(botToken, chatId, imageUrl, fullCaption);
         if (result && result.ok) {
           console.log(`Image message successfully sent to chat ID: ${chatId}`);
         } else {
@@ -166,6 +170,7 @@ async function sendPhotoMessageWithDelay(botToken, chatId, imageUrl, caption, lo
     rl.close();
   }
 }
+
 
 const listAbangkuh = [
   "kijang 1, ganti 🦌",
