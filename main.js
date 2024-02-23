@@ -126,7 +126,6 @@ async function sendPhotoMessage(botToken, chatId, imageUrl, caption) {
       chat_id: chatId,
       photo: imageUrl,
       caption: caption,
-      parse_mode: "HTML"
     },
   };
 
